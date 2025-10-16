@@ -1,13 +1,37 @@
 package com.example.demo.shell;
 
+import com.example.demo.account.service.AuthenticationService;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.stereotype.Component;
+
+/*
+* 여기다가 shell의 응답을 적나보다
+*
+* */
 
 @ShellComponent
 public class MyCommands {
 
+    AuthenticationService authenticationService;
+
+    @Autowired
+    public MyCommands(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
+    @ShellMethod
+    public String greet(String name) {
+        return "hiiiiii" + name;
+    }
+
     @ShellMethod
     public String login(long id, String password) {
+
+//        authenticationService(id, password);
+
         return null;
     }
 

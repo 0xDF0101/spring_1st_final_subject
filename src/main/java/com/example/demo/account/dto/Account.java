@@ -1,8 +1,9 @@
 package com.example.demo.account.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 
-
+@AllArgsConstructor
 public class Account {
     @JsonProperty("아이디")
     long id;
