@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
+import java.io.IOException;
 import java.util.List;
 
 /*
@@ -96,4 +97,6 @@ public class MyCommands {
     public String billTotal(String city, String sector, int usage) {
         return priceService.billTotal(city, sector, usage);
     }
+
+
 }

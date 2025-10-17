@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DataParser {
 
-    List<String> cities();
+    List<String> cities() throws IOException;
 
     List<String> sectors(String city);
 

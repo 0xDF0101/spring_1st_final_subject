@@ -19,17 +19,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.springframework.shell.command.invocation.InvocableShellMethod.log;
 
 @ConditionalOnProperty(name="file.type", havingValue = "csv")
 @Component
 public class CsvDataParser implements DataParser{
 
-    public List<Map<String, String>> getCsvResources(String fileName) throws IOException {
+    public List<Map<String, String>> getCsvResources(String fileName) {
         File file;
         try {
             file = new ClassPathResource(fileName).getFile();
         } catch(IOException e) {
-            throw new IOException("파일 로드 중 오류 발생 : " + e.getMessage());
+            throw new RuntimeException("파일 로드 중 오류 발생 : " + e.getMessage());
         }
 
         List<Map<String, String>> data = new ArrayList<>();
@@ -64,13 +67,24 @@ public class CsvDataParser implements DataParser{
 
         } catch (CsvException e) {
             throw new RuntimeException("CSV파일 파싱 중 오류 발생 : " + e);
+        } catch(IOException e) {
+
         }
 
         return data;
     }
 
     public List<String> cities() {
-        return null;
+        List<String> cities = new ArrayList<>();
+        List<Map<String, String>> data;
+        data = getCsvResources("price.csv");
+
+        for (Map<String, String> price : data) {
+            String name = price.get("지자체명");
+            cities.add(name);
+        }
+        cities = cities.stream().distinct().collect(Collectors.toList()); // 중복 제거 코드
+        return cities;
     }
 
     public List<String> sectors(String city) {
@@ -94,6 +108,4 @@ public class CsvDataParser implements DataParser{
         }
         return accounts;
     }
-
-
 }
