@@ -3,6 +3,7 @@ package com.example.demo.common.dataparser;
 import com.example.demo.account.dto.Account;
 import com.example.demo.price.dto.Price;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
+import lombok.extern.slf4j.Slf4j;
 import netscape.javascript.JSObject;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,12 +21,22 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class JsonDataParser {
 
-//    private JSONObject getResources(String fileName) {
-//        JSONParser parser = new JSONParser();
-//
-//    }
+    private Object getJsonResources(String fileName) {
+        JSONParser parser = new JSONParser();
+        try {
+            File file = new ClassPathResource(fileName).getFile();
+            try(Reader reader = new FileReader(file)) {
+                return parser.parse(reader);
+            } catch (ParseException e) {
+                throw new RuntimeException("파싱 중 예외 발생! : " + e);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("파일 입출력 중 오류 발생! : " + e);
+        }
+    }
 
     public List<String> cities() {
         return null;
@@ -41,30 +52,25 @@ public class JsonDataParser {
 
     public List<Account> accounts() throws IOException {
 
-        JSONParser parser = new JSONParser();
         List<Account> accounts = new ArrayList<>();
+        Object jsonData = getJsonResources("account.json");
+        if(jsonData instanceof JSONArray) {
+            JSONArray jsonArray = (JSONArray) jsonData;
+            for(Object obj : jsonArray) {
+                JSONObject user = (JSONObject) obj;
 
-        try {
-            File file = new ClassPathResource("account.json").getFile();
+                String name = (String) user.get("이름");
+                long pw = (long) user.get("비밀번호");
+                long id = (long) user.get("아이디");
 
-            try (Reader reader = new FileReader(file)) {
-                JSONArray jsonArray= (JSONArray) parser.parse(reader);
-                for(Object obj : jsonArray) {
-                    JSONObject user = (JSONObject) obj;
-
-                    String name = (String) user.get("이름");
-                    long pw = (long) user.get("비밀번호");
-                    long id = (long) user.get("아이디");
-
-                    String strPw = String.valueOf(pw);
-                    accounts.add(new Account(id, strPw, name));
-                }
-            } catch (ParseException e) {
-                throw new RuntimeException("파싱 중 예외 발생 : " + e);
+                String strPw = String.valueOf(pw);
+                accounts.add(new Account(id, strPw, name));
             }
-        } catch (IOException e) {
-            throw new RuntimeException("오류다! : " + e);
+        } else {
+            log.error("account.json은 Array 형태가 아닙니다.");
         }
+
+
         return accounts;
     }
 }
