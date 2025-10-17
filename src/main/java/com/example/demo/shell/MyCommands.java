@@ -94,7 +94,7 @@ public class MyCommands {
 
     @ShellMethod
     public String billTotal(String city, String sector, int usage) {
-        return null;
+        return priceService.billTotal(city, sector, usage);
     }
 
 

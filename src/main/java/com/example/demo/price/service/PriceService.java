@@ -32,7 +32,12 @@ public class PriceService {
     }
 
     public String billTotal(String city, String sector, int usage) {
-        return null;
+        Price price = jsonDataParser.price(city, sector);
+        if(price == null) {
+            return "해당 내용이 없습니다.";
+        }
+        return String.format("지자체명: %s, 업종: %s, 구간금액(원): %d, 총금액(원): %d",
+                price.getCity(), price.getSector(), price.getUnitPrice(), price.getUnitPrice()*usage);
     }
 
 }
