@@ -96,6 +96,4 @@ public class MyCommands {
     public String billTotal(String city, String sector, int usage) {
         return priceService.billTotal(city, sector, usage);
     }
-
-
 }
