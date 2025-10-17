@@ -1,8 +1,10 @@
 package com.example.demo.account.service;
 
 import com.example.demo.account.dto.Account;
+import com.example.demo.common.dataparser.DataParser;
 import com.example.demo.common.dataparser.JsonDataParser;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,13 +18,13 @@ public class AuthenticationService {
 
     @Getter
     private Account currentAccount; // 현재 로그인 된 계정 정보를 담음
-    private final JsonDataParser jsonDataParser;
-    private final List<Account> accounts;
+    private DataParser dataParser;
+    private List<Account> accounts;
 
     @Autowired
-    public AuthenticationService(JsonDataParser jsonDataParser) throws IOException {
-        this.jsonDataParser = jsonDataParser;
-        accounts = jsonDataParser.accounts();
+    public AuthenticationService(DataParser dataParser) throws IOException {
+        this.dataParser = dataParser;
+        accounts = dataParser.accounts();
     }
 
     public Account login(Long id, String password) {
