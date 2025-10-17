@@ -2,6 +2,7 @@ package com.example.demo.account.service;
 
 import com.example.demo.account.dto.Account;
 import com.example.demo.common.dataparser.JsonDataParser;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +14,10 @@ import java.util.List;
 @Component
 public class AuthenticationService {
 
-    private Account currentAccount;
-    private JsonDataParser jsonDataParser;
-    private List<Account> accounts;
+    @Getter
+    private Account currentAccount; // 현재 로그인 된 계정 정보를 담음
+    private final JsonDataParser jsonDataParser;
+    private final List<Account> accounts;
 
     @Autowired
     public AuthenticationService(JsonDataParser jsonDataParser) throws IOException {
@@ -26,13 +28,26 @@ public class AuthenticationService {
     public Account login(Long id, String password) {
 
         for(Account account : accounts) {
-
+            if(account.getId() == id && account.getPassword().equals(password)) { // id, pw 일치
+                currentAccount = account; // 현재 계정 정보
+                return account; // 이걸 왜 넘겨주는거임?
+            }
         }
-
-
-        return null;
+        return null; // 일치하는 계정이 없을 경우 null 반환
+        // ----------> 이렇게 넘겨주면 안될듯!
+        // ---> 반환값을 Optional로 해주면 됨
+        // 시간 날때 하기 지금은 귀찮
     }
 
-    public void logout() {
+    public Account logout() {
+        Account returnAccount;
+        if(currentAccount==null) { // 이미 로그아웃 상태라면
+            return null;
+        } else {
+            returnAccount = currentAccount;
+            currentAccount = null; // 현재 계정 정보를 비워놓음
+            return returnAccount;
+        }
     }
+
 }

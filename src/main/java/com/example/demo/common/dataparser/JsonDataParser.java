@@ -22,6 +22,11 @@ import java.util.Map;
 @Component
 public class JsonDataParser {
 
+//    private JSONObject getResources(String fileName) {
+//        JSONParser parser = new JSONParser();
+//
+//    }
+
     public List<String> cities() {
         return null;
     }
@@ -40,25 +45,26 @@ public class JsonDataParser {
         List<Account> accounts = new ArrayList<>();
 
         try {
-            File file = new ClassPathResource("acount.json").getFile();
+            File file = new ClassPathResource("account.json").getFile();
 
             try (Reader reader = new FileReader(file)) {
                 JSONArray jsonArray= (JSONArray) parser.parse(reader);
                 for(Object obj : jsonArray) {
                     JSONObject user = (JSONObject) obj;
 
-                    long id = (long) user.get("아이디");
-                    String pw = (String) user.get("비밀번호");
                     String name = (String) user.get("이름");
+                    long pw = (long) user.get("비밀번호");
+                    long id = (long) user.get("아이디");
 
-                    accounts.add(new Account(id, pw, name));
+                    String strPw = String.valueOf(pw);
+                    accounts.add(new Account(id, strPw, name));
                 }
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("파싱 중 예외 발생 : " + e);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("오류다! : " + e);
         }
-        return null;
+        return accounts;
     }
 }
