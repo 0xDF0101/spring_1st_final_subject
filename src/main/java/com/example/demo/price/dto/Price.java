@@ -1,8 +1,11 @@
 package com.example.demo.price.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-
+@AllArgsConstructor
+@Getter
 public class Price {
     @JsonProperty("순번")
     long id;

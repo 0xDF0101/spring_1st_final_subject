@@ -28,7 +28,7 @@ public class PriceService {
     }
 
     public Price price(String city, String sector) {
-        return null;
+        return jsonDataParser.price(city, sector);
     }
 
     public String billTotal(String city, String sector, int usage) {

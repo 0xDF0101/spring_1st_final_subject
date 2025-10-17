@@ -2,6 +2,7 @@ package com.example.demo.shell;
 
 import com.example.demo.account.dto.Account;
 import com.example.demo.account.service.AuthenticationService;
+import com.example.demo.price.dto.Price;
 import com.example.demo.price.service.PriceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +84,12 @@ public class MyCommands {
 
     @ShellMethod
     public String price(String city, String sector) {
-        return null;
+        Price price = priceService.price(city, sector);
+        if(price == null) {
+            return "해당 내용이 없습니다.";
+        }
+        return String.format("Price(id=%d, city=%s, sector=%s, unitPrice=%d)",
+                price.getId(), price.getCity(), price.getSector(), price.getUnitPrice());
     }
 
     @ShellMethod

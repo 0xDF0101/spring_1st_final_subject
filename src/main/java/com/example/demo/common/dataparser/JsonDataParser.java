@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JsonDataParser {
 
+    // 파일 입출력 담당
     private Object getJsonResources(String fileName) {
         JSONParser parser = new JSONParser();
         try {
@@ -78,6 +79,22 @@ public class JsonDataParser {
     }
 
     public Price price(String city, String sector) {
+
+        Object jsonData = getJsonResources("price.json");
+        if(jsonData instanceof JSONArray jsonArray){
+            for(Object obj : jsonArray) {
+                JSONObject user = (JSONObject) obj;
+
+                String name = (String) user.get("지자체명");
+                String type = (String) user.get("업종");
+                long step = (long) user.get("단계");
+                long id = (long) user.get("순번");
+                long unitPrice = (long) user.get("구간금액(원)");
+                if(name.equals(city) && sector.equals(type) && step == 1) { // 1단계만 하라네
+                    return new Price(id, city, sector, (int)unitPrice);
+                }
+            }
+        }
         return null;
     }
 
