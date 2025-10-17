@@ -39,7 +39,20 @@ public class JsonDataParser {
     }
 
     public List<String> cities() {
-        return null;
+
+        List<String> cities = new ArrayList<>();
+        Object jsonData = getJsonResources("price.json");
+        if(jsonData instanceof JSONArray){
+            JSONArray jsonArray = (JSONArray) jsonData;
+            for(Object obj : jsonArray) {
+                JSONObject user = (JSONObject) obj;
+
+                String name = (String) user.get("지자체명");
+                cities.add(name);
+            }
+        }
+
+        return cities;
     }
 
     public List<String> sectors(String city) {
@@ -69,8 +82,6 @@ public class JsonDataParser {
         } else {
             log.error("account.json은 Array 형태가 아닙니다.");
         }
-
-
         return accounts;
     }
 }

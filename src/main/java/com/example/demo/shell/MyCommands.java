@@ -2,10 +2,13 @@ package com.example.demo.shell;
 
 import com.example.demo.account.dto.Account;
 import com.example.demo.account.service.AuthenticationService;
+import com.example.demo.price.service.PriceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+
+import java.util.List;
 
 /*
 * 여기다가 shell의 응답을 적나보다
@@ -17,10 +20,13 @@ import org.springframework.shell.standard.ShellMethod;
 public class MyCommands {
 
     AuthenticationService authenticationService;
+    PriceService priceService;
 
     @Autowired // 의존성 주입
-    public MyCommands(AuthenticationService authenticationService) {
+    public MyCommands(AuthenticationService authenticationService,
+                      PriceService priceService) {
         this.authenticationService = authenticationService;
+        this.priceService = priceService;
     }
 
     @ShellMethod
@@ -32,9 +38,6 @@ public class MyCommands {
     public String login(long id, String password) {
 
         Account account = authenticationService.login(id, password);
-//        log.info("id: {}", account.getId());
-//        log.info("pw: {}", account.getPassword());
-//        log.info("name: {}", account.getName());
         if(account == null) {
             return "잘못된 id나 pw입니다.";
         }
@@ -62,7 +65,10 @@ public class MyCommands {
 
     @ShellMethod
     public String city() {
-        return null;
+
+        List<String> cities = priceService.cities();
+
+        return cities.toString();
     }
 
     @ShellMethod
