@@ -9,6 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -51,12 +53,28 @@ public class JsonDataParser {
                 cities.add(name);
             }
         }
-
+        cities = cities.stream().distinct().collect(Collectors.toList()); // 중복 제거 코드
         return cities;
     }
 
     public List<String> sectors(String city) {
-        return null;
+
+        List<String> types = new ArrayList<>();
+        Object jsonData = getJsonResources("price.json");
+        if(jsonData instanceof JSONArray){
+            JSONArray jsonArray = (JSONArray) jsonData;
+            for(Object obj : jsonArray) {
+                JSONObject user = (JSONObject) obj;
+
+                String name = (String) user.get("지자체명");
+                if(name.equals(city)) {
+                    String type = (String) user.get("업종");
+                    types.add(type);
+                }
+            }
+        }
+        types = types.stream().distinct().collect(Collectors.toList()); // 중복 제거
+        return types;
     }
 
     public Price price(String city, String sector) {

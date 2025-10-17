@@ -20,13 +20,11 @@ public class PriceService {
     }
 
     public List<String> cities() {
-        List<String> cities = jsonDataParser.cities();
-        cities = cities.stream().distinct().collect(Collectors.toList()); // 중복 제거 코드
-        return cities;
+        return jsonDataParser.cities();
     }
 
     public List<String> sectors(String city) {
-        return null;
+        return jsonDataParser.sectors(city);
     }
 
     public Price price(String city, String sector) {

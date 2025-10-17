@@ -73,7 +73,12 @@ public class MyCommands {
 
     @ShellMethod
     public String sector(String city) {
-        return null;
+        List<String> types = priceService.sectors(city);
+        if(types.isEmpty()) {  // null체크를 하는게 맞나?
+            return "도시 이름을 잘못 입력하셨습니다.";
+        } else {
+            return types.toString();
+        }
     }
 
     @ShellMethod
