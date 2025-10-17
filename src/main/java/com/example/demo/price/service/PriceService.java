@@ -1,5 +1,6 @@
 package com.example.demo.price.service;
 
+import com.example.demo.common.dataparser.DataParser;
 import com.example.demo.common.dataparser.JsonDataParser;
 import com.example.demo.price.dto.Price;
 import com.example.demo.price.formatter.EnglishOutputFormatter;
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PriceService {
 
-    private final JsonDataParser jsonDataParser;
+//    private final JsonDataParser jsonDataParser;
+    private final DataParser dataParser;
     private final OutPutFormatter outPutFormatter;
 
 //    @Autowired
@@ -30,26 +32,20 @@ public class PriceService {
 //    }
 
     public List<String> cities() {
-        return jsonDataParser.cities();
+        return dataParser.cities();
     }
 
     public List<String> sectors(String city) {
-        return jsonDataParser.sectors(city);
+        return dataParser.sectors(city);
     }
 
     public Price price(String city, String sector) {
-        return jsonDataParser.price(city, sector);
+        return dataParser.price(city, sector);
     }
 
     public String billTotal(String city, String sector, int usage) {
-        Price price = jsonDataParser.price(city, sector);
+        Price price = dataParser.price(city, sector);
 
         return outPutFormatter.format(price, usage);
-
-
-
-
-
-
     }
 }

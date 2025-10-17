@@ -9,6 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -22,9 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
 @Slf4j
-public class JsonDataParser {
+@ConditionalOnProperty(name="file.type", havingValue = "json")
+@Component
+public class JsonDataParser implements DataParser{
 
     // 파일 입출력 담당
     private Object getJsonResources(String fileName) {
@@ -41,6 +43,7 @@ public class JsonDataParser {
         }
     }
 
+    @Override
     public List<String> cities() {
 
         List<String> cities = new ArrayList<>();
@@ -58,6 +61,7 @@ public class JsonDataParser {
         return cities;
     }
 
+    @Override
     public List<String> sectors(String city) {
 
         List<String> types = new ArrayList<>();
@@ -78,6 +82,7 @@ public class JsonDataParser {
         return types;
     }
 
+    @Override
     public Price price(String city, String sector) {
 
         Object jsonData = getJsonResources("price.json");
@@ -98,7 +103,8 @@ public class JsonDataParser {
         return null;
     }
 
-    public List<Account> accounts() throws IOException {
+    @Override
+    public List<Account> accounts() {
 
         List<Account> accounts = new ArrayList<>();
         Object jsonData = getJsonResources("account.json");
