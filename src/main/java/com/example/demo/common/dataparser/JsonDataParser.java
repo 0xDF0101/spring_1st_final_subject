@@ -28,6 +28,10 @@ import java.util.stream.Collectors;
 @Component
 public class JsonDataParser implements DataParser{
 
+    @Override
+    public <T> List<T> loadData(String fileName, Class<T> type) throws IOException {
+        return null;
+    }
     // 파일 입출력 담당
     private Object getJsonResources(String fileName) {
         JSONParser parser = new JSONParser();

@@ -32,7 +32,7 @@ public class PriceService {
 //        this.
 //    }
 
-    public List<String> cities() {
+    public List<String> cities() throws IOException {
         return dataParser.cities();
     }
 

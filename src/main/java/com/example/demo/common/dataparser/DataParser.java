@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface DataParser {
 
+    <T> List<T> loadData(String fileName, Class<T> type) throws IOException; // ⭐️ 추가
+
     List<String> cities() throws IOException;
 
     List<String> sectors(String city);

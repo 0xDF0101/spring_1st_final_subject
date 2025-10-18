@@ -66,7 +66,7 @@ public class MyCommands {
     }
 
     @ShellMethod
-    public String city() {
+    public String city() throws IOException {
 
         List<String> cities = priceService.cities();
 
